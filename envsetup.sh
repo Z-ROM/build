@@ -62,12 +62,12 @@ function check_product()
         return
     fi
 
-    if (echo -n $1 | grep -q -e "^ose_") ; then
-       OSE_BUILD=$(echo -n $1 | sed -e 's/^ose_//g')
+    if (echo -n $1 | grep -q -e "^zrom_") ; then
+       ZROM_BUILD=$(echo -n $1 | sed -e 's/^zrom_//g')
     else
-       OSE_BUILD=
+       ZROM_BUILD=
     fi
-    export OSE_BUILD
+    export ZROM_BUILD
 
     CALLED_FROM_SETUP=true BUILD_SYSTEM=build/core \
         TARGET_PRODUCT=$1 \
@@ -489,7 +489,7 @@ function breakfast()
     CM_DEVICES_ONLY="true"
     unset LUNCH_MENU_CHOICES
     add_lunch_combo full-eng
-    for f in `/bin/ls vendor/ose/vendorsetup.sh 2> /dev/null`
+    for f in `/bin/ls vendor/zrom/vendorsetup.sh 2> /dev/null`
         do
 echo "including $f"
             . $f
@@ -505,8 +505,8 @@ echo "z$target" | grep -q "-"
             # A buildtype was specified, assume a full device name
             lunch $target
         else
-            # This is probably just the OSE model name
-            lunch ose_$target-userdebug
+            # This is probably just the ZROM model name
+            lunch zrom_$target-userdebug
         fi
 fi
 return $?
@@ -553,7 +553,7 @@ function lunch()
     check_product $product
     if [ $? -ne 0 ]
     then
-        # if we can't find a product, try to grab it off the OSE github
+        # if we can't find a product, try to grab it off the ZROM github
         T=$(gettop)
         pushd $T > /dev/null
         build/tools/roomservice.py $product
